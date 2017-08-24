@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-24 19:56:20
+ * @Last Modified time: 2017-08-24 19:57:51
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -37,8 +37,6 @@ class ServiceConfig {
     let stage = this.options.stage ? this.options.stage : this.serverless.service.provider.stage;
     let customerId = this.options.customerId;
     // let apiKey = this.options.apiKey;
-    let configPath = path.join(this.serverless.config.servicePath, 'config.json');
-    console.log('config file:', configPath);
     let config = {
         stage: stage,
         region: region,
@@ -46,6 +44,8 @@ class ServiceConfig {
         // apiKey: apiKey,
     };
     console.log(config);
+    let configPath = path.join(this.serverless.config.servicePath, 'config.json');
+    console.log('config file:', configPath);
     fs.writeFile(configPath, JSON.stringify(config), function(error) {
         if (error) {
             console.error('Problem creating service config file at', configPath);
