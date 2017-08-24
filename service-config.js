@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-24 17:07:43
+ * @Last Modified time: 2017-08-24 17:11:43
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -12,6 +12,16 @@ class ServiceConfig {
   constructor(serverless, options) {
     this.serverless = serverless;
     this.options = options;
+    this.commands = {
+        deploy: {
+          lifecycleEvents: [
+            'functions',
+          ],
+        },
+      };
+      this.hooks = {
+        'before:deploy:functions': this.beforeDeployFunctions.bind(this)
+      };
   }
 
   beforeDeployFunctions() {
