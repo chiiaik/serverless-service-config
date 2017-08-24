@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-24 17:11:43
+ * @Last Modified time: 2017-08-24 19:44:45
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -29,20 +29,23 @@ class ServiceConfig {
     if (_.isEmpty(this.options.customerId)) {
         throw new Error('customerId command line option is required');
     }
+    if (_.isEmpty(this.options.apiKey)) {
+        throw new Error('apiKye command line option is required');
+    }
     console.log('options:', JSON.stringify(this.options));
     let region = this.options.region ? this.options.region : this.serverless.service.provider.region;
     let stage = this.options.stage ? this.options.stage : this.serverless.service.provider.stage;
     let customerId = this.options.customerId;
-    console.log('region:', region);
-    console.log('stage:', stage);
-    console.log('customerId', customerId);
+    let apiKey = this.options.apiKey;
     let configPath = path.join(this.serverless.config.servicePath, 'config.json');
     console.log('config file:', configPath);
     let config = {
         stage: stage,
         region: region,
         customerId: customerId,
+        apiKey: apiKey,
     };
+    console.log(config);
     fs.writeFile(configPath, JSON.stringify(config), function(error) {
         if (error) {
             console.error('Problem creating service config file at', configPath);
