@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-24 16:59:20
+ * @Last Modified time: 2017-08-24 17:07:43
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -12,17 +12,6 @@ class ServiceConfig {
   constructor(serverless, options) {
     this.serverless = serverless;
     this.options = options;
-    this.commands = {
-      deploy: {
-        lifecycleEvents: [
-          'functions'
-        ]
-      },
-    };
-
-    this.hooks = {
-      'before:deploy:functions': this.beforeDeployFunctions.bind(this)
-    };
   }
 
   beforeDeployFunctions() {
@@ -31,7 +20,6 @@ class ServiceConfig {
         throw new Error('customerId command line option is required');
     }
     console.log('options:', JSON.stringify(this.options));
-    let service = this.serverless.service.service;
     let region = this.options.region ? this.options.region : this.serverless.service.provider.region;
     let stage = this.options.stage ? this.options.stage : this.serverless.service.provider.stage;
     let customerId = this.options.customerId;
