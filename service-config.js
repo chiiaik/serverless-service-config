@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-25 10:42:49
+ * @Last Modified time: 2017-08-25 10:48:20
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -30,17 +30,16 @@ class ServiceConfig {
     if (_.isEmpty(this.options.config)) {
       throw new Error('Please specify the file path to your config file with command line switch --config');
     }
+    let content = fs.readFileSync(this.options.config, 'utf8');
+    if (_.isEmpty(content)) {
+      throw new Error('Problem reading config file at ', this.options.config);
+    }
     let config;
-    fs.readFileSync(this.options.config, function(err, data) {
-      if (err) {
-        throw new Error('Problem reading config file at ' + this.options.config);
-      }
-      try {
-        config = JSON.parse(data);
-      } catch (e) {
-        throw new Error('Problem parsing config file due to ' + e);
-      }
-    });
+    try {
+      config = JSON.parse(data);
+    } catch (e) {
+      throw new Error('Problem parsing config file due to ' + e);
+    }
     if (_.isEmpty(config)) {
       throw new Error('Please specify customer and accountId in your config');
     }
