@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-25 10:49:02
+ * @Last Modified time: 2017-08-25 10:50:38
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -46,8 +46,8 @@ class ServiceConfig {
     if (_.isEmpty(config.customer)) {
       throw new Error('Please specify customer in your config');
     }
-    if (_.isEmpty(config.accountId)) {
-      throw new Error('Please specify accountId in your config');
+    if (!_.isNumber(config.accountId)) {
+      throw new Error('Please specify accountId in number format in your config');
     }
     let region = this.options.region ? this.options.region : this.serverless.service.provider.region;
     let stage = this.options.stage ? this.options.stage : this.serverless.service.provider.stage;
