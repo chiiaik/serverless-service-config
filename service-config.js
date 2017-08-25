@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-25 10:56:55
+ * @Last Modified time: 2017-08-25 11:00:59
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -67,10 +67,16 @@ class ServiceConfig {
     if (!_.isNumber(config.accountId)) {
       throw new Error('Please specify accountId in number format in your config');
     }
-    let region = this.options.region ? this.options.region : this.serverless.service.provider.region;
-    let stage = this.options.stage ? this.options.stage : this.serverless.service.provider.stage;
-    config.region = region;
-    config.stage = stage;
+    if (!_.isEmpty(config.region)) {
+      throw new Error('Please specify region, for example, us-east-1 in your config');
+    }
+    if (!_.isEmpty(config.stage)) {
+      throw new Error('Please specify stage, for example, dev in your config');
+    }
+    // let region = this.options.region ? this.options.region : this.serverless.service.provider.region;
+    // let stage = this.options.stage ? this.options.stage : this.serverless.service.provider.stage;
+    // config.region = region;
+    // config.stage = stage;
     console.log(config);
     this.serverless.service.custom = config;
     let configPath = path.join(this.serverless.config.servicePath, 'config.json');
