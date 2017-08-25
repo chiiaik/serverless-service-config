@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-25 10:48:20
+ * @Last Modified time: 2017-08-25 10:49:02
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -36,7 +36,7 @@ class ServiceConfig {
     }
     let config;
     try {
-      config = JSON.parse(data);
+      config = JSON.parse(content);
     } catch (e) {
       throw new Error('Problem parsing config file due to ' + e);
     }
