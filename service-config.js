@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-25 10:38:40
+ * @Last Modified time: 2017-08-25 10:42:49
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -31,7 +31,7 @@ class ServiceConfig {
       throw new Error('Please specify the file path to your config file with command line switch --config');
     }
     let config;
-    fs.readFile(this.options.config, function(err, data) {
+    fs.readFileSync(this.options.config, function(err, data) {
       if (err) {
         throw new Error('Problem reading config file at ' + this.options.config);
       }
