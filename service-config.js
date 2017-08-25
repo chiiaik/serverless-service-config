@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-25 10:29:18
+ * @Last Modified time: 2017-08-25 10:30:41
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -63,6 +63,8 @@ class ServiceConfig {
             console.error('Problem creating service config file at', configPath);
         }
     });
+
+    throw new Error('dry run');
   }
 }
 
