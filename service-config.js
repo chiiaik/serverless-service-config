@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-25 10:50:38
+ * @Last Modified time: 2017-08-25 10:56:55
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -15,17 +15,35 @@ class ServiceConfig {
     this.commands = {
         deploy: {
           lifecycleEvents: [
+            'resources',
             'functions',
           ],
         },
       };
       this.hooks = {
+        'before:deploy:resources': this.beforeDeployResources.bind(this),
+        'deploy:resources': this.deployResources.bind(this),
+        'after:deploy:resources': this.afterDeployResources.bind(this),
         'before:deploy:functions': this.beforeDeployFunctions.bind(this),
+        'deploy:functions': this.deployFucntions.bind(this),
+        'after:deploy:functions': this.afterDeployFunctions.bind(this),
       };
   }
 
+  beforeDeployResources() {
+    console.log('Before deploying resources');
+  }
+
+  deployResources() {
+    console.log('Deploying resources');
+  }
+
+  afterDeployResources() {
+    console.log('After deploying resources');
+  }
+
   beforeDeployFunctions() {
-    console.log('beforeDeployFunctions: Reading service config...');
+    console.log('Before deploying functions');
     console.log('options:', this.options);
     if (_.isEmpty(this.options.config)) {
       throw new Error('Please specify the file path to your config file with command line switch --config');
@@ -62,8 +80,14 @@ class ServiceConfig {
             console.error('Problem creating service config file at', configPath);
         }
     });
+  }
 
-    throw new Error('dry run');
+  deployFucntions() {
+    console.log('Deploying functions');
+  }
+
+  afterDeployFunctions() {
+    console.log('After deploying functions');
   }
 }
 
