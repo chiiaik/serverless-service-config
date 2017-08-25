@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-25 10:27:19
+ * @Last Modified time: 2017-08-25 10:29:18
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -41,6 +41,15 @@ class ServiceConfig {
         throw new Error('Problem parsing config file due to ' + e);
       }
     });
+    if (_.isEmpty(config)) {
+      throw new Error('Please specify customer and accountId in your config');
+    }
+    if (_.isEmpty(config.customer)) {
+      throw new Error('Please specify customer in your config');
+    }
+    if (_.isEmpty(config.accountId)) {
+      throw new Error('Please specify accountId in your config');
+    }
     let region = this.options.region ? this.options.region : this.serverless.service.provider.region;
     let stage = this.options.stage ? this.options.stage : this.serverless.service.provider.stage;
     config.region = region;
