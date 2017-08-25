@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-25 11:00:59
+ * @Last Modified time: 2017-08-25 11:06:27
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -64,8 +64,8 @@ class ServiceConfig {
     if (_.isEmpty(config.customer)) {
       throw new Error('Please specify customer in your config');
     }
-    if (!_.isNumber(config.accountId)) {
-      throw new Error('Please specify accountId in number format in your config');
+    if (!_.isString(config.accountId)) {
+      throw new Error('Please specify accountId in string format in your config');
     }
     if (!_.isEmpty(config.region)) {
       throw new Error('Please specify region, for example, us-east-1 in your config');
