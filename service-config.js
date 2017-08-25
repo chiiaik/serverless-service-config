@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-25 10:30:41
+ * @Last Modified time: 2017-08-25 10:38:40
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -20,7 +20,7 @@ class ServiceConfig {
         },
       };
       this.hooks = {
-        'before:deploy:functions': this.beforeDeployFunctions.bind(this);
+        'before:deploy:functions': this.beforeDeployFunctions.bind(this),
       };
   }
 
