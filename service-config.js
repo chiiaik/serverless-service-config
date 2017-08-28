@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-25 15:38:05
+ * @Last Modified time: 2017-08-28 13:59:38
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -46,6 +46,9 @@ class ServiceConfig {
     console.log('Before deploying functions');
     let region = this.serverless.service.provider.region;
     let stage = this.serverless.service.provider.stage;
+    let custom = this.serverless.service.custom;
+    console.log('custom:', custom);
+    throw new Error('dry run');
     let config = {
       region: region,
       stage: stage,
