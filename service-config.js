@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-28 13:59:38
+ * @Last Modified time: 2017-08-28 14:02:35
  */
 const _ = require('lodash');
 const fs = require('fs');
@@ -44,19 +44,11 @@ class ServiceConfig {
 
   beforeDeployFunctions() {
     console.log('Before deploying functions');
-    let region = this.serverless.service.provider.region;
-    let stage = this.serverless.service.provider.stage;
     let custom = this.serverless.service.custom;
-    console.log('custom:', custom);
-    throw new Error('dry run');
-    let config = {
-      region: region,
-      stage: stage,
-    };
-    console.log('config:', config);
+    console.log('config:', custom);
     let configPath = path.join(this.serverless.config.servicePath, 'config.json');
     console.log('config file:', configPath);
-    fs.writeFile(configPath, JSON.stringify(config), function(error) {
+    fs.writeFile(configPath, JSON.stringify(custom), function(error) {
         if (error) {
             console.error('Problem creating service config file at', configPath);
         }
