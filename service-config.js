@@ -2,9 +2,8 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2017-08-28 14:02:35
+ * @Last Modified time: 2018-04-11 11:01:23
  */
-const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
 
@@ -44,7 +43,7 @@ class ServiceConfig {
 
   beforeDeployFunctions() {
     console.log('Before deploying functions');
-    let custom = this.serverless.service.custom;
+    let custom = Object.assign(this.serverless.service.custom, this.serverless.service.provider.environment);
     console.log('config:', custom);
     let configPath = path.join(this.serverless.config.servicePath, 'config.json');
     console.log('config file:', configPath);
