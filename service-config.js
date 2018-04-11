@@ -2,10 +2,12 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2018-04-11 11:01:23
+ * @Last Modified time: 2018-04-11 13:42:26
  */
 const fs = require('fs');
 const path = require('path');
+const mapKeys = require('lodash.mapkeys');
+const camelCase = require('lodash.camelcase');
 
 class ServiceConfig {
   constructor(serverless, options) {
@@ -43,7 +45,10 @@ class ServiceConfig {
 
   beforeDeployFunctions() {
     console.log('Before deploying functions');
-    let custom = Object.assign(this.serverless.service.custom, this.serverless.service.provider.environment);
+    let tmp = Object.assign(this.serverless.service.custom, this.serverless.service.provider.environment);
+    let custom = mapKeys(tmp, (value, key) => {
+      return camelCase(key);
+    });
     console.log('config:', custom);
     let configPath = path.join(this.serverless.config.servicePath, 'config.json');
     console.log('config file:', configPath);
