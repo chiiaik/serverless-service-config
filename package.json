@@ -1,6 +1,6 @@
 {
   "name": "service-config-plugin",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Serverless plugins",
   "main": "service-config.js",
   "scripts": {

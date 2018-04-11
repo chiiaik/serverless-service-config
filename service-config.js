@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2018-04-11 13:42:26
+ * @Last Modified time: 2018-04-11 15:19:22
  */
 const fs = require('fs');
 const path = require('path');
@@ -45,7 +45,7 @@ class ServiceConfig {
 
   beforeDeployFunctions() {
     console.log('Before deploying functions');
-    let tmp = Object.assign(this.serverless.service.custom, this.serverless.service.provider.environment);
+    let tmp = Object.assign({}, this.serverless.service.custom, this.serverless.service.provider.environment);
     let custom = mapKeys(tmp, (value, key) => {
       return camelCase(key);
     });
