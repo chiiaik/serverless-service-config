@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2018-04-17 14:00:53
+ * @Last Modified time: 2018-04-17 16:04:49
  */
 const fs = require('fs');
 const path = require('path');
@@ -67,17 +67,22 @@ class ServiceConfig {
         custom = mapKeys(tmp, (value, key) => {
           return camelCase(key);
         });
-        return custom.serviceApiKey;
+        return custom.apiKeyId;
       })
       .then((apiKeyId) => {
         return self.fetchApiKey(apiKeyId);
       })
-      .then((apiKey) => {
-        custom = Object.assign(custom, {serviceApiKey: apiKey});
+      .then((data) => {
+        custom.serviceApiKeyId = data.id;
+        return self.storeApiKey(data.id, data.value);
+      })
+      .then((apiKeyVersion) => {
+        delete custom.accountId;
+        delete custom.profile;
         // console.log('config:', custom);
         let configPath = path.join(self.serverless.config.servicePath, 'config.json');
         // console.log('config file:', configPath);
-        fs.writeFile(configPath, JSON.stringify(custom), function(error) {
+        fs.writeFile(configPath, JSON.stringify(custom, null, 2), function(error) {
             if (error) {
                 console.error('Problem creating service config file at', configPath);
             }
@@ -119,9 +124,25 @@ class ServiceConfig {
       params,
       provider.getStage(),
       provider.getRegion()
+    );
+  }
+
+  storeApiKey(apikeyId, apikey) {
+    let params = {
+      Name: apikeyId,
+      Type: 'SecureString',
+      Value: apikey,
+    };
+    let provider = this.serverless.getProvider('aws');
+    return provider.request(
+      'SSM',
+      'putParameter',
+      params,
+      provider.getStage(),
+      provider.getRegion()
     )
     .then((data) => {
-      return data.value;
+      return data.Version;
     });
   }
 
