@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2018-04-17 16:33:16
+ * @Last Modified time: 2018-04-17 16:45:10
  */
 const fs = require('fs');
 const path = require('path');
@@ -92,7 +92,7 @@ class ServiceConfig {
   }
 
   beforeRemoveRemove() {
-    console.log('Before removing stack');
+    // console.log('Before removing stack');
     let self = this;
     return self.fetchStackOutput()
       .then((stackOutput) => stackOutput.ApiKeyId)
