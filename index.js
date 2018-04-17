@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2018-04-17 16:04:49
+ * @Last Modified time: 2018-04-17 16:33:16
  */
 const fs = require('fs');
 const path = require('path');
@@ -29,6 +29,7 @@ class ServiceConfig {
         'deploy:functions': this.deployFucntions.bind(this),
         'after:deploy:functions': this.afterDeployFunctions.bind(this),
         'after:deploy:deploy': this.afterDeployDeploy.bind(this),
+        'before:remove:remove': this.beforeRemoveRemove.bind(this),
       };
   }
 
@@ -90,6 +91,14 @@ class ServiceConfig {
       });
   }
 
+  beforeRemoveRemove() {
+    console.log('Before removing stack');
+    let self = this;
+    return self.fetchStackOutput()
+      .then((stackOutput) => stackOutput.ApiKeyId)
+      .then(self.destroyApiKey.bind(self));
+  }
+
   fetchStackOutput() {
     let stackName = this.getStackName();
     let provider = this.serverless.getProvider('aws');
@@ -144,6 +153,20 @@ class ServiceConfig {
     .then((data) => {
       return data.Version;
     });
+  }
+
+  destroyApiKey(apiKeyId) {
+    let params = {
+      Name: apiKeyId,
+    };
+    let provider = this.serverless.getProvider('aws');
+    return provider.request(
+      'SSM',
+      'deleteParameter',
+      params,
+      provider.getStage(),
+      provider.getRegion()
+    );
   }
 
   getStackName() {
