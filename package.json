@@ -1,18 +1,18 @@
 {
-  "name": "service-config-plugin",
-  "version": "0.0.4",
-  "description": "Serverless plugins",
-  "main": "service-config.js",
+  "name": "serverless-service-config",
+  "version": "0.0.5",
+  "description": "Serverless plugin to output required service configuration values into a JSON file",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org:tinkerstuff/service-config-plugin.git"
+    "url": "git+ssh://git@bitbucket.org:tinkerstuff/serverless-service-config.git"
   },
   "author": "Chii Aik Fang",
   "license": "SEE LICENSE IN LICENSE",
-  "homepage": "https://bitbucket.org/tinkerstuff/service-config-plugin#readme",
+  "homepage": "https://bitbucket.org/tinkerstuff/serverless-service-config#readme",
   "dependencies": {
     "lodash.camelcase": "^4.3.0",
     "lodash.mapkeys": "^4.6.0"
