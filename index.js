@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2018-04-17 13:51:23
+ * @Last Modified time: 2018-04-17 14:00:53
  */
 const fs = require('fs');
 const path = require('path');
@@ -33,32 +33,32 @@ class ServiceConfig {
   }
 
   beforeDeployResources() {
-    console.log('Before deploying resources');
+    // console.log('Before deploying resources');
   }
 
   deployResources() {
-    console.log('Deploying resources');
+    // console.log('Deploying resources');
   }
 
   afterDeployResources() {
-    console.log('After deploying resources');
+    // console.log('After deploying resources');
   }
 
   beforeDeployFunctions() {
-    console.log('Before deploying functions');
+    // console.log('Before deploying functions');
   }
 
   deployFucntions() {
-    console.log('Deploying functions');
+    // console.log('Deploying functions');
   }
 
   afterDeployFunctions() {
-    console.log('After deploying functions');
+    // console.log('After deploying functions');
   }
 
   afterDeployDeploy() {
-    console.log('After deploying deploy');
-    console.log('resources:', this.serverless.service.resources);
+    // console.log('After deploying deploy');
+    // console.log('resources:', this.serverless.service.resources);
     let self = this;
     let custom = null;
     return self.fetchStackOutput()
