@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2018-04-17 16:45:10
+ * @Last Modified time: 2018-04-19 13:45:18
  */
 const fs = require('fs');
 const path = require('path');
@@ -20,17 +20,17 @@ class ServiceConfig {
             'functions',
           ],
         },
-      };
-      this.hooks = {
-        'before:deploy:resources': this.beforeDeployResources.bind(this),
-        'deploy:resources': this.deployResources.bind(this),
-        'after:deploy:resources': this.afterDeployResources.bind(this),
-        'before:deploy:functions': this.beforeDeployFunctions.bind(this),
-        'deploy:functions': this.deployFucntions.bind(this),
-        'after:deploy:functions': this.afterDeployFunctions.bind(this),
-        'after:deploy:deploy': this.afterDeployDeploy.bind(this),
-        'before:remove:remove': this.beforeRemoveRemove.bind(this),
-      };
+    };
+    this.hooks = {
+      'before:deploy:resources': this.beforeDeployResources.bind(this),
+      'deploy:resources': this.deployResources.bind(this),
+      'after:deploy:resources': this.afterDeployResources.bind(this),
+      'before:deploy:functions': this.beforeDeployFunctions.bind(this),
+      'deploy:functions': this.deployFucntions.bind(this),
+      'after:deploy:functions': this.afterDeployFunctions.bind(this),
+      'after:deploy:deploy': this.afterDeployDeploy.bind(this),
+      'before:remove:remove': this.beforeRemoveRemove.bind(this),
+    };
   }
 
   beforeDeployResources() {
@@ -47,6 +47,18 @@ class ServiceConfig {
 
   beforeDeployFunctions() {
     // console.log('Before deploying functions');
+    let tmp = Object.assign({}, self.serverless.service.custom, self.serverless.service.provider.environment);
+    let custom = mapKeys(tmp, (value, key) => {
+      return camelCase(key);
+    });
+    delete custom.accountId;
+    delete custom.profile;
+    let configPath = path.join(self.serverless.config.servicePath, 'config.json');
+    fs.writeFile(configPath, JSON.stringify(custom, null, 2), function(error) {
+        if (error) {
+            console.error('Problem creating service config file at', configPath);
+        }
+    });
   }
 
   deployFucntions() {
@@ -59,7 +71,6 @@ class ServiceConfig {
 
   afterDeployDeploy() {
     // console.log('After deploying deploy');
-    // console.log('resources:', this.serverless.service.resources);
     let self = this;
     let custom = null;
     return self.fetchStackOutput()
@@ -80,9 +91,7 @@ class ServiceConfig {
       .then((apiKeyVersion) => {
         delete custom.accountId;
         delete custom.profile;
-        // console.log('config:', custom);
         let configPath = path.join(self.serverless.config.servicePath, 'config.json');
-        // console.log('config file:', configPath);
         fs.writeFile(configPath, JSON.stringify(custom, null, 2), function(error) {
             if (error) {
                 console.error('Problem creating service config file at', configPath);
