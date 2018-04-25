@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2018-04-23 15:43:17
+ * @Last Modified time: 2018-04-25 16:55:57
  */
 const fs = require('fs');
 const path = require('path');
@@ -54,7 +54,7 @@ class ServiceConfig {
     });
     delete custom.accountId;
     delete custom.profile;
-    let configPath = path.resolve(self.serverless.config.servicePath, 'functions', 'config.json');
+    let configPath = path.resolve(self.serverless.config.servicePath, 'src', 'functions', 'config.json');
     fs.writeFile(configPath, JSON.stringify(custom, null, 2), function(error) {
         if (error) {
             console.error('Problem creating service config file at', configPath);
