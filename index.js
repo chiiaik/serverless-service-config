@@ -2,7 +2,7 @@
  * @Author: Chii Aik Fang 
  * @Date: 2017-08-07 15:08:20 
  * @Last Modified by: Chii Aik Fang
- * @Last Modified time: 2018-04-25 16:55:57
+ * @Last Modified time: 2018-04-25 17:41:58
  */
 const fs = require('fs');
 const path = require('path');
@@ -86,7 +86,6 @@ class ServiceConfig {
         return self.fetchApiKey(apiKeyId);
       })
       .then((data) => {
-        custom.serviceApiKeyId = data.id;
         return self.storeApiKey(data.id, data.value);
       })
       .then((apiKeyVersion) => {
