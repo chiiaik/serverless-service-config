@@ -1,6 +1,6 @@
 {
   "name": "serverless-service-config",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Serverless plugin to output required service configuration values into a JSON file",
   "main": "index.js",
   "scripts": {
@@ -15,6 +15,7 @@
   "homepage": "https://bitbucket.org/tinkerstuff/serverless-service-config#readme",
   "dependencies": {
     "lodash.camelcase": "^4.3.0",
-    "lodash.mapkeys": "^4.6.0"
+    "lodash.mapkeys": "^4.6.0",
+    "uuid": "^3.3.2"
   }
 }

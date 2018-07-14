@@ -8,6 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const mapKeys = require('lodash.mapkeys');
 const camelCase = require('lodash.camelcase');
+const uuidv4 = require('uuid/v4');
 
 class ServiceConfig {
   constructor(serverless, options) {
@@ -104,8 +105,15 @@ class ServiceConfig {
     // console.log('Before removing stack');
     let self = this;
     return self.fetchStackOutput()
-      .then((stackOutput) => stackOutput.ApiKeyId)
-      .then(self.destroyApiKey.bind(self));
+      .then((stackOutput) => {
+        const promises = [];
+        promises.push(self.destroyApiKey(stackOutput.ApiKeyId));
+        if (stackOutput.DBInstanceId) {
+          promises.push(self.setupRDSDBPassword(stackOutput.DBInstanceId));
+        }
+        return Promise.all(promises);
+      })
+      .catch(error => console.error('Problem finishing up stack creation in plugin due to', error));
   }
 
   fetchStackOutput() {
@@ -146,11 +154,92 @@ class ServiceConfig {
   }
 
   storeApiKey(apikeyId, apikey) {
+    let self = this;
+    return self._storeParameter(apikeyId, apikey);
+
+    // let params = {
+    //   Name: apikeyId,
+    //   Type: 'SecureString',
+    //   Value: apikey,
+    //   Overwrite: true,
+    // };
+    // let provider = this.serverless.getProvider('aws');
+    // return provider.request(
+    //   'SSM',
+    //   'putParameter',
+    //   params,
+    //   provider.getStage(),
+    //   provider.getRegion()
+    // )
+    // .then((data) => {
+    //   return data.Version;
+    // });
+  }
+
+  destroyApiKey(apiKeyId) {
+    let self = this;
+    return self._destroyParameter(apiKeyId);
+
+    // let params = {
+    //   Name: apiKeyId,
+    // };
+    // let provider = this.serverless.getProvider('aws');
+    // return provider.request(
+    //   'SSM',
+    //   'deleteParameter',
+    //   params,
+    //   provider.getStage(),
+    //   provider.getRegion()
+    // );
+  }
+
+  setupRDSDBPassword(dbInstaceId) {
+    let self = this;
+    return self._isDBPasswordAlreadySet(dbInstaceId)
+      .then(isSet => {
+        if (isSet) {
+          return;
+        }
+        const dbPassword = uuidv4();
+        return self._storeParameter(dbInstaceId, dbPassword, true, true)
+          .then(() => {
+            return self._modifyDBPassword(dbInstaceId, dbPassword);
+          });
+      })
+      .catch(error => console.error('Problem setting up RDS DB password for instance', dbInstaceId, 'due to', error));
+  }
+
+  _isDBPasswordAlreadySet(dbInstaceId) {
+    let self = this;
+    return self._readParameter(dbInstaceId)
+      .then(data => {
+        return (data && data.Parameter && data.Parameter.Value);
+      });
+  }
+
+  _modifyDBPassword(dbInstaceId, dbPassword) {
+    let self = this;
     let params = {
-      Name: apikeyId,
-      Type: 'SecureString',
-      Value: apikey,
-      Overwrite: true,
+      DBInstanceIdentifier: dbInstaceId,
+      MasterUserPassword: dbPassword,
+    };
+
+    let provider = self.serverless.getProvider('aws');
+    return provider.request(
+      'RDS',
+      'modifyDBInstance',
+      params,
+      provider.getStage(),
+      provider.getRegion(),
+    );
+  }
+
+  _storeParameter(key, value, isSecure = true, overwrite = true) {
+    let params = {
+      Name: key,
+      Type: isSecure ? 'SecureString' : 'String',
+      Value: value,
+      Overwrite: overwrite,
     };
     let provider = this.serverless.getProvider('aws');
     return provider.request(
@@ -165,14 +254,29 @@ class ServiceConfig {
     });
   }
 
-  destroyApiKey(apiKeyId) {
+  _destroyParameter(key) {
     let params = {
-      Name: apiKeyId,
+      Name: key,
     };
     let provider = this.serverless.getProvider('aws');
     return provider.request(
       'SSM',
       'deleteParameter',
+      params,
+      provider.getStage(),
+      provider.getRegion()
+    );
+  }
+
+  _readParameter(key, isSecure = true) {
+    let params = {
+      Name: key,
+      WithDecryption: isSecure,
+    };
+    let provider = this.serverless.getProvider('aws');
+    return provider.request(
+      'SSM',
+      'getParameter',
       params,
       provider.getStage(),
       provider.getRegion()
