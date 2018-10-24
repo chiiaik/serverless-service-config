@@ -81,10 +81,10 @@ class ServiceConfig {
         custom = mapKeys(tmp, (value, key) => {
           return camelCase(key);
         });
-        // return custom.apiKeyId;
-        let apiKeyId = `${custom.stage}-${custom.namespace}-${custom.service}-apiKeyId`;
-        console.log('Serverless-Service-Config: apiKeyId=', apiKeyId);
-        return custom[apiKeyId];
+        return custom.apiKeyId;
+        // let apiKeyId = `${custom.stage}-${custom.namespace}-${custom.service}-apiKeyId`;
+        // console.log('Serverless-Service-Config: apiKeyId=', apiKeyId);
+        // return custom[apiKeyId];
       })
       .then((apiKeyId) => {
         return self.fetchApiKey(apiKeyId);
