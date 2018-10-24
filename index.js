@@ -81,7 +81,10 @@ class ServiceConfig {
         custom = mapKeys(tmp, (value, key) => {
           return camelCase(key);
         });
-        return custom.apiKeyId;
+        // return custom.apiKeyId;
+        let apiKeyId = `${custom.stage}-${custom.namespace}-${custom.service}-apiKeyId`;
+        console.log('apiKeyId:', apiKeyId);
+        return custom[apiKeyId];
       })
       .then((apiKeyId) => {
         return self.fetchApiKey(apiKeyId);
@@ -99,6 +102,11 @@ class ServiceConfig {
             }
         });
       });
+
+      /*
+        To resolve db parameters used in lambda, use dbName as the key to store dbPassword in SSM
+        Figure out how to set dbHost, dbUser, dbPassword and dbName to env. variable of lambda
+      */
   }
 
   beforeRemoveRemove() {
