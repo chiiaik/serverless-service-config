@@ -58,7 +58,7 @@ class ServiceConfig {
     let configPath = path.resolve(self.serverless.config.servicePath, 'src', 'functions', 'config.json');
     fs.writeFile(configPath, JSON.stringify(custom, null, 2), function(error) {
         if (error) {
-            console.error('Problem creating service config file at', configPath);
+            console.error('Serverless-Service-Config: Problem creating service config file at', configPath);
         }
     });
   }
@@ -83,7 +83,7 @@ class ServiceConfig {
         });
         // return custom.apiKeyId;
         let apiKeyId = `${custom.stage}-${custom.namespace}-${custom.service}-apiKeyId`;
-        console.log('apiKeyId:', apiKeyId);
+        console.log('Serverless-Service-Config: apiKeyId=', apiKeyId);
         return custom[apiKeyId];
       })
       .then((apiKeyId) => {
@@ -98,7 +98,7 @@ class ServiceConfig {
         let configPath = path.resolve(self.serverless.config.servicePath, '__test__', 'config.json');
         fs.writeFile(configPath, JSON.stringify(custom, null, 2), function(error) {
             if (error) {
-                console.error('Problem creating service config file at', configPath);
+                console.error('Serverless-Service-Config: Problem creating service config file at', configPath);
             }
         });
       });
@@ -121,7 +121,7 @@ class ServiceConfig {
         }
         return Promise.all(promises);
       })
-      .catch(error => console.error('Problem finishing up stack creation in plugin due to', error));
+      .catch(error => console.error('Serverless-Service-Config: Problem finishing up stack creation in plugin due to', error.message));
   }
 
   fetchStackOutput() {
@@ -214,7 +214,7 @@ class ServiceConfig {
             return self._modifyDBPassword(dbInstaceId, dbPassword);
           });
       })
-      .catch(error => console.error('Problem setting up RDS DB password for instance', dbInstaceId, 'due to', error));
+      .catch(error => console.error('Serverless-Service-Config: Problem setting up RDS DB password for instance', dbInstaceId, 'due to', error.message));
   }
 
   _isDBPasswordAlreadySet(dbInstaceId) {
