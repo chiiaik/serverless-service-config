@@ -8,6 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const mapKeys = require('lodash.mapkeys');
 const camelCase = require('lodash.camelcase');
+const isEmpty = require('lodash.isempty');
 const uuidv4 = require('uuid/v4');
 
 class ServiceConfig {
@@ -87,10 +88,10 @@ class ServiceConfig {
         // return custom[apiKeyId];
       })
       .then((apiKeyId) => {
-        return self.fetchApiKey(apiKeyId);
+        return isEmpty(apiKeyId) ? null : self.fetchApiKey(apiKeyId);
       })
       .then((data) => {
-        return self.storeApiKey(data.id, data.value);
+        return isEmpty(data) ? null :  self.storeApiKey(data.id, data.value);
       })
       .then((apiKeyVersion) => {
         delete custom.accountId;
