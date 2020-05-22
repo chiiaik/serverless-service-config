@@ -191,7 +191,10 @@ class ServiceConfig {
 
   destroyApiKey(config) {
     let self = this;
-    return self._destroyParameter(self._formatKey(config, 'apikey'));
+    return self._destroyParameter(self._formatKey(config, 'apikey'))
+    .catch((error) => {
+      console.warn('FAILED to remove apikey from parameter store due to ', error.message);
+    });
 
     // let params = {
     //   Name: apiKeyId,
