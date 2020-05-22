@@ -54,7 +54,7 @@ class ServiceConfig {
     let custom = mapKeys(tmp, (value, key) => {
       return camelCase(key);
     });
-    delete custom.accountId;
+    // delete custom.accountId;
     delete custom.profile;
     let configPath = path.resolve(self.serverless.config.servicePath, 'src', 'functions', 'config.json');
     fs.writeFile(configPath, JSON.stringify(custom, null, 2), function(error) {
@@ -94,7 +94,7 @@ class ServiceConfig {
         return isEmpty(data) ? null :  self.storeApiKey(custom, data.value);
       })
       .then((apiKeyVersion) => {
-        delete custom.accountId;
+        // delete custom.accountId;
         delete custom.profile;
         let configPath = path.resolve(self.serverless.config.servicePath, '__test__', 'config.json');
         fs.writeFile(configPath, JSON.stringify(custom, null, 2), function(error) {
