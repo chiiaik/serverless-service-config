@@ -115,8 +115,12 @@ class ServiceConfig {
     let self = this;
     return self.fetchStackOutput()
       .then((stackOutput) => {
+        let tmp = Object.assign({}, self.serverless.service.custom, self.serverless.service.provider.environment, stackOutput);
+        let custom = mapKeys(tmp, (value, key) => {
+          return camelCase(key);
+        });
         const promises = [];
-        promises.push(self.destroyApiKey(stackOutput));
+        promises.push(self.destroyApiKey(custom));
         if (stackOutput.DBInstanceId) {
           promises.push(self.setupRDSDBPassword(stackOutput.DBInstanceId));
         }
