@@ -116,7 +116,7 @@ class ServiceConfig {
     return self.fetchStackOutput()
       .then((stackOutput) => {
         const promises = [];
-        promises.push(self.destroyApiKey(stackOutput.ApiKeyId));
+        promises.push(self.destroyApiKey(stackOutput));
         if (stackOutput.DBInstanceId) {
           promises.push(self.setupRDSDBPassword(stackOutput.DBInstanceId));
         }
@@ -185,9 +185,9 @@ class ServiceConfig {
     // });
   }
 
-  destroyApiKey(apiKeyId) {
+  destroyApiKey(config) {
     let self = this;
-    return self._destroyParameter(apiKeyId);
+    return self._destroyParameter(self._formatKey(config, 'apikey'));
 
     // let params = {
     //   Name: apiKeyId,
