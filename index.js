@@ -91,7 +91,7 @@ class ServiceConfig {
         return isEmpty(apiKeyId) ? null : self.fetchApiKey(apiKeyId);
       })
       .then((data) => {
-        return isEmpty(data) ? null :  self.storeApiKey(data.id, data.value);
+        return isEmpty(data) ? null :  self.storeApiKey(custom, data.value);
       })
       .then((apiKeyVersion) => {
         delete custom.accountId;
@@ -162,9 +162,9 @@ class ServiceConfig {
     );
   }
 
-  storeApiKey(apikeyId, apikey) {
+  storeApiKey(config, apikey) {
     let self = this;
-    return self._storeParameter(apikeyId, apikey);
+    return self._storeParameter(self._formatKey(config, 'apikey'), apikey);
 
     // let params = {
     //   Name: apikeyId,
@@ -216,6 +216,10 @@ class ServiceConfig {
           });
       })
       .catch(error => console.error('Serverless-Service-Config: Problem setting up RDS DB password for instance', dbInstaceId, 'due to', error.message));
+  }
+
+  _formatKey(config, name) {
+    return `${config.namespace}-${config.service}-${config.stage}-${name}`
   }
 
   _isDBPasswordAlreadySet(dbInstaceId) {
