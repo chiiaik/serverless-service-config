@@ -95,7 +95,7 @@ class ServiceConfig {
       })
       .then(() => {
         if (!isEmpty(custom.serviceEndpoint)) {
-          return self._storeParameter(self._formatKey(custom, 'endpoint'));
+          return self._storeParameter(self._formatKey(custom, 'endpoint'), custom.serviceEndpoint);
         }
       })
       .then(() => {
