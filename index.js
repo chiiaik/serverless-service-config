@@ -93,7 +93,12 @@ class ServiceConfig {
       .then((data) => {
         return isEmpty(data) ? null :  self.storeApiKey(custom, data.value);
       })
-      .then((apiKeyVersion) => {
+      .then(() => {
+        if (!isEmpty(custom.serviceEndpoint)) {
+          return self._storeParameter(self._formatKey(custom, 'endpoint'));
+        }
+      })
+      .then(() => {
         // delete custom.accountId;
         delete custom.profile;
         let configPath = path.resolve(self.serverless.config.servicePath, '__test__', 'config.json');
